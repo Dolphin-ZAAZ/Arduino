@@ -1,6 +1,8 @@
 #ifndef TFT_DRIVER_H
 #define TFT_DRIVER_H
 
+#include <Arduino.h>
+
 // System, Status & Diagnostic Commands
 #define NOP                        0x00
 #define SOFT_RESET                 0x01
@@ -102,90 +104,18 @@
 class TftDriver {
     public:
         TftDriver();
+        void writePixel(int row, int column, uint16_t color);
+    private:
+        void latchRead();
+        void latchWrite();
+        void writeCommand(uint8_t command, uint8_t parameters[], int parameterSize);
+        void readCommand(uint8_t command, uint8_t* out_parameters, int parameterSize);
+        uint8_t getLowByte(uint16_t value);
+        uint8_t getHighByte(uint16_t value);
+        void writeData(uint8_t data);
+        uint8_t readData();
+        void setPageAddress(uint16_t startAddress, uint16_t endAddress);
+        void setColumnAddress(uint16_t startAddress, uint16_t endAddress);
 };
 
 #endif
-
-// //latch read
-// //latch write
-// //write command
-// //write data
-// //read data
-
-
-// // Pin definitions
-// #define LCD_CS   10
-// #define LCD_RS   9   // Register Select (DC)
-// #define LCD_WR   8   // Write Enable
-// #define LCD_RD   7   // Read Enable  
-// #define LCD_RST  6   // Reset
-
-// // Data bus pins (8-bit example)
-// #define LCD_D0   0
-// #define LCD_D1   1
-// #define LCD_D2   2
-// #define LCD_D3   3
-// #define LCD_D4   4
-// #define LCD_D5   5
-// #define LCD_D6   A0
-// #define LCD_D7   A1
-
-// void writeCommand(uint8_t cmd) {
-//     digitalWrite(LCD_CS, LOW);    // Select display
-//     digitalWrite(LCD_RS, LOW);    // Command mode
-    
-//     // Put command on data bus
-//     setDataBus(cmd);
-    
-//     // Latch command with write pulse
-//     digitalWrite(LCD_WR, LOW);    // Start write
-//     delayMicroseconds(1);         // Hold time
-//     digitalWrite(LCD_WR, HIGH);   // End write - data latched
-    
-//     digitalWrite(LCD_CS, HIGH);   // Deselect
-// }
-
-// void writeData(uint8_t data) {
-//     digitalWrite(LCD_CS, LOW);    // Select display
-//     digitalWrite(LCD_RS, HIGH);   // Data mode
-    
-//     // Put data on bus
-//     setDataBus(data);
-    
-//     // Latch data with write pulse
-//     digitalWrite(LCD_WR, LOW);
-//     delayMicroseconds(1);
-//     digitalWrite(LCD_WR, HIGH);   // Data latched here
-    
-//     digitalWrite(LCD_CS, HIGH);
-// }
-
-// void setDataBus(uint8_t value) {
-//     // Set each data pin based on bit value
-//     digitalWrite(LCD_D0, (value & 0x01) ? HIGH : LOW);
-//     digitalWrite(LCD_D1, (value & 0x02) ? HIGH : LOW);
-//     digitalWrite(LCD_D2, (value & 0x04) ? HIGH : LOW);
-//     digitalWrite(LCD_D3, (value & 0x08) ? HIGH : LOW);
-//     digitalWrite(LCD_D4, (value & 0x10) ? HIGH : LOW);
-//     digitalWrite(LCD_D5, (value & 0x20) ? HIGH : LOW);
-//     digitalWrite(LCD_D6, (value & 0x40) ? HIGH : LOW);
-//     digitalWrite(LCD_D7, (value & 0x80) ? HIGH : LOW);
-// }
-
-// // Example: Set pixel color at coordinates
-// void setPixel(uint16_t x, uint16_t y, uint16_t color) {
-//     // Column address command
-//     writeCommand(0x2A);           // Set column address
-//     writeData(x >> 8);            // X high byte
-//     writeData(x & 0xFF);          // X low byte
-    
-//     // Row address command  
-//     writeCommand(0x2B);           // Set row address
-//     writeData(y >> 8);            // Y high byte
-//     writeData(y & 0xFF);          // Y low byte
-    
-//     // Write pixel data
-//     writeCommand(0x2C);           // Memory write
-//     writeData(color >> 8);        // Color high byte
-//     writeData(color & 0xFF);      // Color low byte
-// }
