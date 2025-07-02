@@ -7,9 +7,16 @@
 
 class TftDriver {
     public:
-        TftDriver();
         void writePixel(int page, int column, uint16_t color);
+        void drawRectangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint16_t color);
+        void testFunction();
+        void init();
     private:
+        void readDisplayIds();
+        void initializeBasicSequence();
+        void readDisplayIdsNoDummy();
+        void setDataPinsAsInputs();
+        void setDataPinsAsOutputs();
         void latchRead();
         void latchWrite();
         void writeCommand(uint8_t command, uint8_t parameters[], int parameterSize);

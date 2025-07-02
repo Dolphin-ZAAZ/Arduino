@@ -1,52 +1,37 @@
-bool prevButton1 = false;
-bool prevButton2 = false;
-bool prevButton3 = false;
-bool prevButton4 = false;
-bool prevButton5 = false;
+// Include the configured library
+#include <TFT_eSPI.h>
+#include <SPI.h>
+
+// Create an instance of the TFT_eSPI class
+TFT_eSPI tft = TFT_eSPI();
 
 void setup() {
-  Serial.begin(9600);
-  pinMode(13, OUTPUT); //Power
-  pinMode(2, INPUT); //5
-  pinMode(3, INPUT_PULLUP); //4
-  pinMode(4, INPUT_PULLUP); //3
-  pinMode(5, INPUT_PULLUP); //2
-  pinMode(6, INPUT_PULLUP); //1
-  pinMode(7, INPUT); //Analogue Click
-  pinMode(8, OUTPUT); //Passive Buzzer
+  // Initialize the display
+  tft.init();
+  
+  // Set the screen rotation. 0 & 2 are portrait, 1 & 3 are landscape.
+  // The correct orientation depends on your screen's internal layout.
+  // Try 0, 1, 2, or 3 to see which one is correct.
+  tft.setRotation(1); 
+
+  // Fill the screen with black
+  tft.fillScreen(TFT_BLACK);
+  
+  // Set the text color to white and the background to black
+  tft.setTextColor(TFT_WHITE, TFT_BLACK); 
+  
+  // Set the text "datum" (font size) to 4
+  tft.setTextDatum(MC_DATUM); // Middle-Center alignment
+  tft.setTextSize(2);
+
+  // Print text to the screen
+  // tft.drawString(text, x, y);
+  tft.drawString("Hello from Arduino R4!", tft.width() / 2, tft.height() / 2 - 20);
+
+  tft.setTextColor(TFT_YELLOW, TFT_BLACK);
+  tft.drawString("Screen: RM68140 320x480", tft.width() / 2, tft.height() / 2 + 20);
 }
 
 void loop() {
-  bool isOn = false;
-
-  int analogueX = analogRead(A4);
-  int analogueY = analogRead(A5);
-  int analogueClick = digitalRead(7);
-
-  int petentiometerValue = analogRead(A3);
-
-  int soundSensorAnalogue = analogRead(A2);
-  int soundSensorDigital = digitalRead(9);
-
-  int button1 = digitalRead(6);
-  int button2 = digitalRead(5);
-  int button3 = digitalRead(4);
-  int button4 = digitalRead(3);
-  int button5 = digitalRead(2);
-
-  Serial.println(button5);
-
-  prevButton5 = button5;
-
-  if (button5 == 1) {
-    if (button5 != prevButton5) {
-      isOn = !isOn;
-    }
-  }
-
-  // if (isOn) {
-  //   digitalWrite(13, HIGH);
-  // } else {
-  //   digitalWrite(13, LOW);
-  // }
+  // Nothing to do here for this example
 }
